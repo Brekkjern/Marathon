@@ -59,7 +59,7 @@ jobs:
         with:
           path: "."
           #acs-report-enable: true
-          fail-buid: false  # Always generate report
+          fail-build: false  # Always generate report
         
       - name: Upload Grype SARIF Results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
