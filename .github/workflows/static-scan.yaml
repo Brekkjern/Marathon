@@ -2,7 +2,7 @@ name: Static Scans
 
 on:
   #push:
-  worflow_dispatch:
+  workflow_dispatch: # ...
 
 permissions:
   contents: read
