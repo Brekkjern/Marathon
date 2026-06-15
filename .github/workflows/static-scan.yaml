@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      ## Build
       - name: Checkout sources
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
@@ -37,3 +39,14 @@ jobs:
       
       - name: Build with Maven
         run: cd marathon || :; mvn clean install
+
+      ## SBOM
+
+      - name: Generate CycloneDX SBOM
+        run: mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.9:makeAggregateBom
+
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sbom-cyclonedx.json
+          path: target/bom.json
