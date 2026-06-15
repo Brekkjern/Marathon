@@ -50,3 +50,19 @@ jobs:
         with:
           name: sbom-cyclonedx.json
           path: target/bom.json
+
+      ## Grype SCA
+
+      - name: Grype Dep Scan (Report)
+        id: scan
+        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2  # v7.4.0
+        with:
+          path: "."
+          #acs-report-enable: true
+          fail-buid: false  # Always generate report
+        
+      - name: Upload Grype SARIF Results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: grype-scan-results.sarif
+          path: ${{ steps.scan.outputs.sarif }}
