@@ -1,0 +1,39 @@
+name: Static Scans
+
+on:
+  #push:
+  worflow_dispatch:
+
+permissions:
+  contents: read
+  #security-events: write
+
+jobs:
+
+  sast-scans:
+    name: SAST Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      
+      - name: Set up JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654  # v5.2.0
+        with:
+          java-version: 11
+          distribution: 'temurin'
+      
+      - name: Setup Maven Dependency Cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae  # v5.0.5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml')}}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      
+      - name: Build with Maven
+        run: cd marathon || :; mvn clean install
